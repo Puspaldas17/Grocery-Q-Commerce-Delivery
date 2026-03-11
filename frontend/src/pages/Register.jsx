@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import API_BASE from '../config';
 
 const platforms = ['Zepto', 'Blinkit', 'Instamart', 'Other'];
 const zones = [
@@ -23,7 +24,7 @@ export default function Register() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('http://localhost:5000/api/workers/register', {
+      const res = await fetch(`${API_BASE}/api/workers/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
