@@ -13,16 +13,39 @@ export default function Register() {
   const [form, setForm] = useState({ name: '', phone: '', platform: '', zone: '' });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [workerId] = useState(`WKR-${Math.floor(1000 + Math.random() * 9000)}`);
+  const [error, setError] = useState('');
+  const [workerData, setWorkerData] = useState(null); // real data from MongoDB
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1200)); // simulate API call
-    setLoading(false);
-    setSubmitted(true);
+    setError('');
+    try {
+      const res = await fetch('http://localhost:5000/api/workers/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          platform: form.platform,
+          zone: form.zone,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Registration failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+      setWorkerData(data);   // store real response (workerId, riskCategory, etc.)
+      setSubmitted(true);
+    } catch {
+      setError('Cannot connect to server. Make sure the backend is running on port 5000.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -34,14 +57,24 @@ export default function Register() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-black text-white mb-2">You're Protected!</h2>
-          <p className="text-slate-400 text-sm mb-6">
+          <h2 className="text-2xl font-black text-white mb-2">You're Protected! 🎉</h2>
+          <p className="text-slate-400 text-sm mb-3">
             Welcome to GigShield AI, <span className="text-white font-semibold">{form.name}</span>.
             Your Worker ID is:
           </p>
-          <div className="px-5 py-3 bg-slate-800/80 border border-white/10 rounded-xl font-mono text-indigo-400 font-bold text-lg mb-8">
-            {workerId}
+          <div className="px-5 py-3 bg-slate-800/80 border border-white/10 rounded-xl font-mono text-indigo-400 font-bold text-lg mb-3">
+            {workerData?.workerId}
           </div>
+          {workerData?.worker && (
+            <div className="mb-6 text-xs text-slate-400 space-y-1">
+              <p>Risk Category: <span className={`font-bold ${
+                workerData.worker.riskCategory === 'High' ? 'text-rose-400' :
+                workerData.worker.riskCategory === 'Medium' ? 'text-amber-400' : 'text-emerald-400'
+              }`}>{workerData.worker.riskCategory}</span></p>
+              <p>Risk Score: <span className="text-white font-semibold">{workerData.worker.riskScore}/100</span></p>
+              <p>Zone: <span className="text-white font-semibold">{workerData.worker.primaryZone}</span></p>
+            </div>
+          )}
           <div className="space-y-3">
             <Link
               to="/dashboard"
@@ -192,6 +225,16 @@ export default function Register() {
                 'Activate My Weekly Cover →'
               )}
             </button>
+
+            {/* Error message */}
+            {error && (
+              <div className="flex items-center gap-2 px-4 py-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 text-xs font-medium">
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                </svg>
+                {error}
+              </div>
+            )}
 
             <p className="text-center text-slate-600 text-xs">
               By registering you agree to our{' '}
