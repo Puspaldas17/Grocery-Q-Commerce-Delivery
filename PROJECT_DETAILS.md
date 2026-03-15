@@ -294,6 +294,16 @@ GigShield AI directly addresses **UN SDG 8 — Decent Work and Economic Growth**
 
 ---
 
+## 📁 Project Resources
+
+All project assets — screenshots, UI designs, presentation slides, and supporting documents are available on Google Drive:
+
+| Resource | Link |
+|---|---|
+| 📂 **GigShield AI — Project Folder** | [Open Google Drive](https://drive.google.com/drive/folders/1b6Y4EcyNmq3mmfMpQrjnpgwdK4bUxdOx) |
+
+---
+
 <div align="center">
 
 ← [Back to README](./README.md)

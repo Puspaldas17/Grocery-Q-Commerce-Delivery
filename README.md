@@ -27,6 +27,7 @@
 | 🔧 **Backend API** | Express server running locally | `http://localhost:5000/api/health` |
 | 🤖 **AI Service** | FastAPI risk scoring service | `http://localhost:8000/health` |
 | ⭐ **GitHub Repo** | Star and fork the project | [GitHub](https://github.com/) |
+| 📁 **Project Assets** | Screenshots, designs, and supporting files | [📂 View on Google Drive](https://drive.google.com/drive/folders/1b6Y4EcyNmq3mmfMpQrjnpgwdK4bUxdOx) |
 
 > 💡 **New here?** Start with the [📋 Project Details](./PROJECT_DETAILS.md) file — it has user journeys, complete feature descriptions, data flow architecture, and the full API reference.
 
